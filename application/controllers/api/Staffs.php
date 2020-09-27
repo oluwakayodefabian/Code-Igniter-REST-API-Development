@@ -16,7 +16,8 @@ class Staffs extends REST_Controller
         $this->load->model(['api/staff_model']);
         $this->load->library(['form_validation']);
     }
-    public function index_post() { 
+    public function index_post() 
+    { 
         $this->data = $this->security->xss_clean($this->input->post());
         $this->form_validation->set_data($this->data);
         $this->form_validation->set_rules('first_name', 'First Name', 'required');
@@ -37,11 +38,11 @@ class Staffs extends REST_Controller
           else 
           {
             $this->data = [
-                'first_name' => $this->input->post('first_name'),
-                'surname' => $this->input->post('surname'),
-                'email' => $this->input->post('email'),
-                'phone_no' => $this->input->post('phone_no'),
-                'role' => $this->input->post('role'),
+                'first_name'        => $this->input->post('first_name'),
+                'surname'           => $this->input->post('surname'),
+                'email'             => $this->input->post('email'),
+                'phone_no'          => $this->input->post('phone_no'),
+                'role'              => $this->input->post('role'),
                 'course_being_taught' => $this->input->post('course_being_taught')
             ];
             if ($this->staff_model->insert_staff($this->data)) 
@@ -50,26 +51,26 @@ class Staffs extends REST_Controller
             }
             else
             {
-                $this->set_response(['status' => FALSE, 'Operation failed'], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
-                
+                $this->set_response(['status' => FALSE, 'Operation failed'], REST_Controller::HTTP_INTERNAL_SERVER_ERROR); 
             }
           }
-        }
-    protected function index_get()
+    }
+    public function index_get()
     {
         $this->data = $this->staff_model->get_all_staffs();
-        if (!$this->data) {
+        if (!$this->data) 
+        {
             throw new Exception("Error Processing Request");
         }
         else
         {
             if (count($this->data) > 0) 
             {
-                $this->set_response(['status' => 1, 'Staff Added Successfully', 'data' => $this->data], REST_Controller::HTTP_OK);
+                $this->set_response(['status' => 1, 'Staff\'s data retrieved Successfully', 'data' => $this->data], REST_Controller::HTTP_OK);
             }
             else
             {
-                $this->set_response(['status' => FALSE, 'Operation failed'], REST_Controller::HTTP_INTERNAL_SERVER_ERROR);
+                $this->set_response(['status' => FALSE, 'Operation failed'], REST_Controller::HTTP_NOT_FOUND);
             }
         } 
     }
@@ -85,10 +86,10 @@ class Staffs extends REST_Controller
             $this->staff_id = $this->data->id;
             $this->data = [
                 'first_name' => $this->data->first_name,
-                'surname'   => $this->data->surname,
-                'email'     => $this->data->email,
-                'phone_no'  => $this->data->phone_no,
-                'role'      => $this->data->role,
+                'surname'    => $this->data->surname,
+                'email'      => $this->data->email,
+                'phone_no'   => $this->data->phone_no,
+                'role'       => $this->data->role,
                 'course_being_taught' => $this->data->course_being_taught,
             ];
             if ($this->staff_model->update_staff_info($this->staff_id, $this->data))
@@ -107,7 +108,7 @@ class Staffs extends REST_Controller
         $this->staff_id = $this->security->xss_clean($this->data->id);
         if ($this->staff_model->delete_staff($this->staff_id))
         {
-            $this->set_response(['status' => 1, 'message' => 'Staff Info Deleted Successfully'], REST_Controller::HTTP_OK);
+            $this->set_response(['status' => 1, 'message' => 'Staff Info Deleted Successfully'], parent::HTTP_OK);
         }
         else
         {
